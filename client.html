@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
+</head>
+
+<body>
+
+    <button onclick="sendMessage()">Send Message</button>
+    <p id="output"></p>
+
+    <script>
+        // URL of the WebSocket server, change this to your server
+        const serverUrl = 'ws://localhost:3000/room/123';
+
+        const ws = new WebSocket(serverUrl);
+
+        ws.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+            document.getElementById('output').innerHTML += 'Connected to server!<br>';
+        };
+
+        ws.onmessage = (event) => {
+            console.log('Received:', event.data);
+            document.getElementById('output').innerHTML += 'Received: ' + event.data + '<br>';
+        };
+
+        ws.onerror = (event) => {
+            console.error('WebSocket error:', event);
+        };
+
+        ws.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            document.getElementById('output').innerHTML += 'Disconnected from server.<br>';
+        };
+
+        function sendMessage() {
+            const message = 'Hello Server!';
+            ws.send(message);
+            document.getElementById('output').innerHTML += 'Sent: ' + message + '<br>';
+        }
+    </script>
+
+</body>
+
+</html>
