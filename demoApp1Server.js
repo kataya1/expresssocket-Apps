@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const expressWs = require("../../expresssocket")(app);
+const expressWs = require("express-socket-routes")(app);
 const WebSocket = require('ws');
 
 const webSocketServer = new WebSocket.Server({ noServer: true });
@@ -44,6 +44,6 @@ app.sRoute("/room/:id", (request, socket, head) => {
 });
 
 
-app.listen(3000, () => {
-    console.log('app listening on port 3000')
+app.listen(port = 3000, () => {
+    console.log('app listening on port' + port)
 });
