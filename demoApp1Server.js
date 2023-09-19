@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const expressWs = require("express-socket-routes")(app);
+const _ = require("express-socket-routes")(app);
 const WebSocket = require('ws');
 
 const webSocketServer = new WebSocket.Server({ noServer: true });
