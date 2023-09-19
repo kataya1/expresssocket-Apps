@@ -8,34 +8,44 @@
 </head>
 
 <body>
+    <select id="roomSelect">
+        <option value="123">Room 1</option>
+        <option value="456">Room 2</option>
+        <option value="789">Room 3</option>
+    </select>
+    <button onclick="joinRoom()">Join Room</button>
 
     <button onclick="sendMessage()">Send Message</button>
     <p id="output"></p>
 
     <script>
-        // URL of the WebSocket server, change this to your server
-        const serverUrl = 'ws://localhost:3000/room/123';
+        let serverUrl;
+        let ws;
+        function joinRoom() {
+            const room = document.getElementById('roomSelect').value;
+            serverUrl = 'ws://localhost:3000/room/' + room;
+            ws = new WebSocket(serverUrl);
+            // Rest of the logic...
 
-        const ws = new WebSocket(serverUrl);
+            ws.onopen = (event) => {
+                console.log('WebSocket connection opened:', event);
+                document.getElementById('output').innerHTML += 'Connected to server!<br>';
+            };
 
-        ws.onopen = (event) => {
-            console.log('WebSocket connection opened:', event);
-            document.getElementById('output').innerHTML += 'Connected to server!<br>';
-        };
+            ws.onmessage = (event) => {
+                console.log('Received:', event.data);
+                document.getElementById('output').innerHTML += 'Received: ' + event.data + '<br>';
+            };
 
-        ws.onmessage = (event) => {
-            console.log('Received:', event.data);
-            document.getElementById('output').innerHTML += 'Received: ' + event.data + '<br>';
-        };
+            ws.onerror = (event) => {
+                console.error('WebSocket error:', event);
+            };
 
-        ws.onerror = (event) => {
-            console.error('WebSocket error:', event);
-        };
-
-        ws.onclose = (event) => {
-            console.log('WebSocket connection closed:', event);
-            document.getElementById('output').innerHTML += 'Disconnected from server.<br>';
-        };
+            ws.onclose = (event) => {
+                console.log('WebSocket connection closed:', event);
+                document.getElementById('output').innerHTML += 'Disconnected from server.<br>';
+            };
+        }
 
         function sendMessage() {
             const message = 'Hello Server!';
